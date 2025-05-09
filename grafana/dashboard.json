@@ -1,0 +1,4 @@
+// Exported Grafana dashboard configuration.
+// Used to recreate the layout and queries in another Grafana instance.
+
+// Role: Dashboard
