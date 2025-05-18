@@ -1,3 +1,7 @@
+# ignore files related to the dashboard
+dashboard/node_modules
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
