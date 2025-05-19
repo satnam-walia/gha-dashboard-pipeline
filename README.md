@@ -19,6 +19,21 @@ This project builds an automated dashboard that monitors GitHub Actions workflow
 | Grafana          | Visual dashboard for KPIs and trends           |
 | GitHub Actions   | Schedule regular extractions (CI/CD automation)|
 
+## Setup
+
+- Having Python 3.13.2 in your machine
+- Install pipenv in your machine
+    - *Command:* `pip install --user pipenv`
+- `cd` into the project's folder
+- Install dependencies
+    - *Command:* `pipenv install`
+- Run virtual env shell
+    - *Command:* `pipenv shell`
+- To execute files
+    - *Command:* `python {path/to/file}`
+- To exit the shell
+    - *Command:* `exit`
+
 ## Project Structure
 
 ```text
