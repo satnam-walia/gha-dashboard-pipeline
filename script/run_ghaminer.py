@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 REPO_YAML = BASE_DIR / "config" / "repos.yaml"
 GHA_METRICS_SCRIPT = Path.home() / "PycharmProjects" / "GHAminer" / "src" / "GHAMetrics.py"
 CSV_PATH = BASE_DIR / "builds_features.csv"
-LOG_PATH = BASE_DIR / "logs" / "ghaminer.log"
+LOG_PATH = BASE_DIR / "data" / "ghaminer.log"
 
 # === Configure Logging ===
 logging.basicConfig(

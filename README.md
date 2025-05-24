@@ -1,23 +1,20 @@
 # GHA Dashboard Pipeline
 
-This project builds an automated dashboard that monitors GitHub Actions workflows for a target repository (e.g., `milvus-io/milvus`). It uses the open-source tool **GHAminer** to extract workflow metrics, stores them in **PostgreSQL**, and visualizes insights via **Grafana**.
 
 ## Objectives
 
-- Automatically extract GitHub Actions workflow data
-- Store metrics in a structured PostgreSQL database
-- Visualize KPIs in an interactive Grafana dashboard
+- Visualize KPIs in an interactive dashboard
 - Enable future extensions for machine learning (ML) predictions
 
 ## Tech Stack
 
-| Component        | Purpose                                        |
-|------------------|------------------------------------------------|
-| GHAminer         | Extract GitHub Actions build + test metrics    |
-| Python           | Automate ingestion and transformation scripts  |
-| PostgreSQL       | Store and query CI/CD data                     |
-| Grafana          | Visual dashboard for KPIs and trends           |
-| GitHub Actions   | Schedule regular extractions (CI/CD automation)|
+| Component     | Purpose                                                          |
+|---------------|------------------------------------------------------------------|
+| GHAminer      | Extract raw GitHub Actions workflow, job, and step metrics       |
+| Python        | Automate extraction (via wrapper) and transform to KPI CSVs      |
+| CSV Files     | Store both raw and transformed metric data (no database used)    |
+| Static JS/HTML| Render interactive dashboard locally from `kpis.csv`             |
+| Cron (local)  | Schedule periodic metric refresh (e.g., every 5 minutes)         |
 
 ## Wrapper Setup (Python)
 
@@ -34,7 +31,7 @@ This project builds an automated dashboard that monitors GitHub Actions workflow
 - To exit the shell
     - *Command:* `exit`
 
-## Dashboard Setup (Web Dev part)
+## Dashboard Setup (React)
 
 - The Dashboard is the HTML page that will display the data as tables and graphs
     - Will be hosted by the github pages feature that allows to host publicly a static website (to discuss)
@@ -57,16 +54,19 @@ This project builds an automated dashboard that monitors GitHub Actions workflow
 
 ```text
 gha-dashboard-pipeline/
-├── scripts/               # Python scripts for ingestion and data cleaning
-├── config/                # Repo and database config files
-├── dashboard/             # Dashboard's source files ; Where we implement the dashboard site
-├── db/                    # PostgreSQL schema + optional seed data
-├── docs/                  # Built and bundled Dashboard site, ready to use and get hosted
-├── grafana/               # Dashboard export (JSON) + setup guide
-├── .github/workflows/     # GitHub Actions scheduler
-├── output/                # Optional CSV output of extracted metrics
-├── logs/                  # Log files from ingestion runs
-├── api/                   # (Optional) REST API to expose metrics
+├── scripts/                   # Python scripts for metric extraction and transformation
+│   ├── run_ghaminer.py        # Wrapper script for GHAminer extraction
+│   └── transform_kpis.py      # Converts raw CSVs to KPI-ready format
+├── config/                    # Configuration files
+│   └── repos.yaml             # List of GitHub repos to monitor
+├── dashboard/                 # Static frontend dashboard (HTML/JS)
+├── docs/                      # Bundled output of dashboard (for static hosting)
+├── data/                      # Output CSVs from the pipeline
+│   ├── workflows.csv          # Raw extracted workflow/job/step data
+│   └── kpis.csv               # Cleaned KPIs for dashboard input
+├── logs/                      # Runtime logs
+│   └── gha-cron.log           # Cron/scheduler output
+└── README.md                  # Setup instructions and usage guide
 ```
 
 ## Tracked KPIs
@@ -76,10 +76,6 @@ gha-dashboard-pipeline/
 - Top failing workflows
 - PR authors with repeated failures
 - Workflow volume over time
-
-## Automation
-
-The pipeline runs every 15 minutes using **GitHub Actions**, automatically ingesting new GitHub Actions runs and storing them in PostgreSQL. Grafana connects directly to this database for live dashboards.
 
 ## Future Extensions (ML)
 
