@@ -19,13 +19,49 @@ This project builds an automated dashboard that monitors GitHub Actions workflow
 | Grafana          | Visual dashboard for KPIs and trends           |
 | GitHub Actions   | Schedule regular extractions (CI/CD automation)|
 
+## Wrapper Setup (Python)
+
+- Having Python 3.13.2 in your machine
+- Install pipenv in your machine
+    - *Command:* `pip install --user pipenv`
+- `cd` into the project's folder
+- Install dependencies
+    - *Command:* `pipenv install`
+- Run virtual env shell
+    - *Command:* `pipenv shell`
+- To execute files
+    - *Command:* `python {path/to/file}`
+- To exit the shell
+    - *Command:* `exit`
+
+## Dashboard Setup (Web Dev part)
+
+- The Dashboard is the HTML page that will display the data as tables and graphs
+    - Will be hosted by the github pages feature that allows to host publicly a static website (to discuss)
+- The source files are located in the dashboard folder
+- The project uses Webpack to build and generate final files in the docs folder
+- To run the website (Dashboard) locally you will have to:
+    - `cd `into the dashboard folder
+    - run the command: `npm install`
+    - run the command: `npm run dev`
+    - go to the local address given from terminal (use web browser)
+- The data_samples.csv file is here for testing
+    - After uploading it, there will be a table that has the file's content displayed (for now)
+    - Console logs the content of the csv file too
+- Usefull commands:
+    - `npm run build` used to build and bundle the files without running a local server 
+    - `npm run dev` used to build and bundle the files, then to run a local server to test and see the outcome
+
+
 ## Project Structure
 
 ```text
 gha-dashboard-pipeline/
 ├── scripts/               # Python scripts for ingestion and data cleaning
 ├── config/                # Repo and database config files
+├── dashboard/             # Dashboard's source files ; Where we implement the dashboard site
 ├── db/                    # PostgreSQL schema + optional seed data
+├── docs/                  # Built and bundled Dashboard site, ready to use and get hosted
 ├── grafana/               # Dashboard export (JSON) + setup guide
 ├── .github/workflows/     # GitHub Actions scheduler
 ├── output/                # Optional CSV output of extracted metrics
