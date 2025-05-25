@@ -5,10 +5,6 @@ import Papa from "papaparse";
 const HomePage = ({setCsvData}) => {
     const [dragOver, setDragOver] = useState(false)
     const [file, setFile] = useState(null)
-
-    const handleFile = (file) => {
-        setFile(file)
-    }
     const handleSubmit = () => {
         Papa.parse(file, {
             header: true,

@@ -2,8 +2,6 @@ import WorkflowStddevChart from "../charts/WorkflowStddevChart.jsx";
 import WorkflowFailureChart from "../charts/WorkflowFailureChart.jsx";
 import {IssuerFailureTable} from "../tables/IssuerFailureTable.jsx";
 import ReactLogo from "./../assets/react.svg"
-import {Link} from "react-router-dom";
-
 const DashboardPage = ({kpis}) => {
     return (
         <div className="mx-56 p-8 bg-white">
