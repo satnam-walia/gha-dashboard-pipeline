@@ -12,7 +12,7 @@ module.exports = {
   plugins: [
     new CopyPlugin({
       patterns: [
-        {from: path.resolve(__dirname, 'index.html'), to: path.resolve(__dirname, '../docs/index.html')},
+        {from: path.resolve(__dirname, 'index_hold.html'), to: path.resolve(__dirname, '../docs/index_hold.html')},
         {from: path.resolve(__dirname, 'style.css'), to: path.resolve(__dirname, '../docs/style.css')}
       ]
     })
