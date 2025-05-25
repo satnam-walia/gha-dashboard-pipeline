@@ -1,1 +1,7 @@
 @import "tailwindcss";
+:root{
+    @apply bg-blue-100;
+}
+.chart-style {
+    @apply my-8 border border-gray-50 rounded-2xl border-gray-200 bg-gray-50 text-center;
+}

@@ -1,19 +1,39 @@
 import React from 'react'
-import {BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid} from 'recharts'
+import {
 
-const WorkflowFailureChart = ({data}) => (
-    <div className="my-8">
-        <h3 className="text-xl font-semibold mb-4">Taux d'échec par workflow</h3>
-        <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={data} layout="vertical" margin={{left: 100}}>
-                <CartesianGrid strokeDasharray="3 3"/>
-                <XAxis type="number" domain={[0, 100]}
-                       label={{value: "% d'échec", position: 'insideBottomRight', offset: 0}}/>
-                <YAxis type="category" dataKey="workflow_name"/>
-                <Tooltip/>
-                <Bar dataKey="failure_rate" fill="#f87171"/>
-            </BarChart>
-        </ResponsiveContainer>
-    </div>
-)
+    Tooltip,
+    ResponsiveContainer,
+    PieChart,
+    Pie,
+    Cell,
+    Legend
+} from 'recharts'
+
+const COLORS = ['#60a5fa', '#facc15', '#4ade80', '#f87171', '#a78bfa', '#f472b6']
+const WorkflowFailureChart = ({data}) => {
+    return (
+        <div className="chart-style">
+            <h3 className="text-xl font-semibold mb-4 text-center">Taux d'échec par workflow</h3>
+            <ResponsiveContainer width="100%" height={400}>
+                <PieChart>
+                    <Pie
+                        data={data}
+                        dataKey="failure_rate"
+                        nameKey="workflow_name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={120}
+                        label
+                    >
+                        {data.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend layout="horizontal" verticalAlign="bottom" align="center" />
+                </PieChart>
+            </ResponsiveContainer>
+        </div>
+    )
+}
 export default WorkflowFailureChart

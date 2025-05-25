@@ -14,7 +14,7 @@ const HomePage = ({setCsvData}) => {
             header: true,
             skipEmptyLines: true,
             complete: (result) => {
-                //setCsvData(result.data)
+                setCsvData(result.data)
                 console.log("finish")
             },
         })
@@ -38,7 +38,7 @@ const HomePage = ({setCsvData}) => {
         }
     }
     return (
-        <div className="w-full flex flex-col items-center justify-center bg-grey-50 px-4 mt-10 gap-5">
+        <div className="w-full min-h-screen flex flex-col items-center bg-white justify-cente px-4 pt-20 gap-5">
             <div className={"flex flex-col items-center justify-center gap-3"}>
                 <h1 className={"text-blue-600 text-5xl font-bold"}>Home page</h1>
                 <p className={"text-gray-500"}>Welcome to home page</p>
