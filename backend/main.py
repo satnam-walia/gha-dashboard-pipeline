@@ -16,7 +16,6 @@ from dotenv import load_dotenv
 
 # Add project root to sys.path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
-from db.db_utils import insert_builds
 
 # === Setup Paths ===
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -73,7 +72,6 @@ def main():
 
         rows = load_metrics_from_csv()
         if rows:
-            insert_builds(rows)
             print(f"[3/3] Inserted {len(rows)} rows into database.")
         else:
             print("[3/3] No rows to insert.")
