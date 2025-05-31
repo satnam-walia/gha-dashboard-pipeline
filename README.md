@@ -11,13 +11,11 @@ This project builds an automated dashboard that monitors GitHub Actions workflow
 
 ## Tech Stack
 
-| Component        | Purpose                                        |
-|------------------|------------------------------------------------|
-| GHAminer         | Extract GitHub Actions build + test metrics    |
-| Python           | Automate ingestion and transformation scripts  |
-| PostgreSQL       | Store and query CI/CD data                     |
-| Grafana          | Visual dashboard for KPIs and trends           |
-| GitHub Actions   | Schedule regular extractions (CI/CD automation)|
+| Component      | Purpose                                        |
+|----------------|------------------------------------------------|
+| GHAminer       | Extract GitHub Actions build + test metrics    |
+| Python         | Automate ingestion and transformation scripts  |
+| ReactJS        | Visual dashboard for KPIs and trends           |
 
 ## Wrapper Setup (Python)
 
