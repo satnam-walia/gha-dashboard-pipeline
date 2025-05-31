@@ -1,6 +1,6 @@
-import { X, FileText } from 'lucide-react'
+import { X, FileText, Loader2 } from 'lucide-react'
 
-const FilePreviewCard = ({ file, onRemove, onSubmit }) => {
+const FilePreviewCard = ({ file, onRemove, onSubmit, isLoading }) => {
     const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1)
 
     return (
@@ -13,16 +13,18 @@ const FilePreviewCard = ({ file, onRemove, onSubmit }) => {
                         <p className="text-xs text-gray-500">{fileSizeMB} MB</p>
                     </div>
                 </div>
-                <button onClick={onRemove} className="text-blue-600 hover:text-red-600 transition">
+                <button onClick={onRemove} className="text-blue-600 hover:text-red-600 transition" disabled={isLoading}>
                     <X className="w-5 h-5 cursor-pointer" />
                 </button>
             </div>
 
             <button
                 onClick={onSubmit}
-                className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded"
+                className={`flex items-center justify-center gap-2 bg-blue-600 text-white text-sm px-4 py-2 rounded transition-colors duration-200 ${isLoading ? 'opacity-75 cursor-not-allowed' : 'hover:bg-blue-700 cursor-pointer'}`}
+                disabled={isLoading}
             >
-                Générer le dashboard
+                {isLoading && <Loader2 className="animate-spin h-4 w-4" />}
+                {isLoading ? 'Traitement...' : 'Générer le dashboard'}
             </button>
         </div>
     )

@@ -1,6 +1,4 @@
-import React from 'react'
 import {
-
     Tooltip,
     ResponsiveContainer,
     PieChart,
@@ -10,6 +8,7 @@ import {
 } from 'recharts'
 
 const COLORS = ['#60a5fa', '#facc15', '#4ade80', '#f87171', '#a78bfa', '#f472b6']
+
 const WorkflowFailureChart = ({data}) => {
     return (
         <div className="chart-style">
@@ -36,4 +35,5 @@ const WorkflowFailureChart = ({data}) => {
         </div>
     )
 }
+
 export default WorkflowFailureChart
