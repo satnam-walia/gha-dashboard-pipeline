@@ -1,8 +1,9 @@
 import WorkflowStddevChart from "../charts/WorkflowStddevChart.jsx";
 import WorkflowFailureChart from "../charts/WorkflowFailureChart.jsx";
 import {IssuerFailureTable} from "../tables/IssuerFailureTable.jsx";
-import ReactLogo from "./../assets/react.svg"
-const DashboardPage = ({kpis}) => {
+import ReactLogo from "../assets/react.svg"
+
+const DashboardPage = ({ kpis, onReset }) => {
     return (
         <div className="mx-56 p-8 bg-white">
             <div className="flex flex-row items-baseline justify-start gap-2">
