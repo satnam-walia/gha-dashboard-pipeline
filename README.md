@@ -57,16 +57,14 @@ This project builds an automated dashboard that monitors GitHub Actions workflow
 
 ```text
 gha-dashboard-pipeline/
-├── scripts/               # Python scripts for ingestion and data cleaning
+├── .github/workflows/     # GitHub Actions scheduler
+├── api/                   # REST API to expose metrics
 ├── config/                # Repo and database config files
 ├── dashboard/             # Dashboard's source files ; Where we implement the dashboard site
 ├── db/                    # PostgreSQL schema + optional seed data
-├── docs/                  # Built and bundled Dashboard site, ready to use and get hosted
-├── grafana/               # Dashboard export (JSON) + setup guide
-├── .github/workflows/     # GitHub Actions scheduler
+├── docs/                  # Various documentation
 ├── output/                # Optional CSV output of extracted metrics
-├── logs/                  # Log files from ingestion runs
-├── api/                   # (Optional) REST API to expose metrics
+├── scripts/               # Python scripts for ingestion and data cleaning
 ```
 
 ## Tracked KPIs
