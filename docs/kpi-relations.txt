@@ -1,0 +1,192 @@
+
+Table RawData {
+  repo string
+  id_build int
+  branch string
+  commit_sha string
+  languages string
+  status string
+  conclusion string
+  workflow_event_trigger string
+  issuer_name string
+  workflow_id integer
+  created_at date
+  updated_at date
+  build_duration float
+  total_builds int
+  gh_files_added int
+  gh_files_deleted int
+  gh_files_modified int
+  tests_ran boolean
+  gh_lines_added int
+  gh_lines_deleted int
+  file_types list(array)
+  gh_tests_added int
+  gh_tests_deleted int
+  gh_test_churn int
+  gh_src_churn int
+  gh_pull_req_number int
+  gh_is_pr boolean
+  gh_sloc int
+  gh_src_files int
+  gh_doc_files int
+  gh_other_files int
+  git_commits int
+  gh_job_id list(array)
+  total_jobs int
+  job_details json[]
+  gh_first_commit_created_at date
+  gh_team_size_last_3_month int
+  gh_commits_on_files_touched int
+  git_merged_with string
+  gh_test_lines_per_kloc float
+  build_language string
+  workflow_size int
+  test_framework list(array)
+  tests_passed int
+  tests_failed int
+  tests_skipped int
+  tests_total int
+  workflow_name string
+}
+
+Table job_details {
+  job_name string
+  job_start date
+  job_end date
+  job_duration float
+  job_result string
+  steps json[] 
+}
+
+Table steps{
+  step_name string
+  step_conclusion string
+  step_start date
+  step_end date
+  step_duration float
+}
+
+Table mostFaillingWorkflows{
+  workflow_name string
+  failure_rate float
+}
+Table mostFaillingJobsForEachWorkflow{
+  workflow_name string
+  job_name string
+  faillure_rate float
+}
+
+Table stdDevOfWorkflow{
+  workflow_name string
+  duration_stddev float
+}
+
+Table averageFailedWorkflowExecutionTime{
+  workflow_name string
+  average_duration float
+}
+
+Table averageExecutionTimeOfJobs{
+  workflow_name string
+  average_time float
+}
+
+Table mostFaillingSteps{
+  workflow_name string
+  job_name string
+  step_name string
+  faillure_rate float
+}
+
+Table buildFileTypesCausingFaillures{
+  file_type string
+  faillure_rate float
+}
+
+Table averageTestsOfWorkflowPassed{
+  workflow_name string
+  average_success_rate float
+}
+
+Table averageModifiedTestsPerExecution{
+  average_churn float
+}
+
+Table averageMofifiedTestPerWorkflowPerExecution{
+  workflow_name string
+  average_churn float
+}
+
+Table averageFaillureOfTeamMembers{
+  team_size int
+  average_faillure_rate float
+}
+
+Ref: "RawData"."job_details" < "job_details"."job_name"
+
+Ref: "job_details"."steps" < "steps"."step_name"
+
+Ref: "mostFaillingWorkflows"."workflow_name" < "RawData"."workflow_name"
+
+Ref: "mostFaillingWorkflows"."workflow_name" < "RawData"."conclusion"
+
+Ref: "mostFaillingJobsForEachWorkflow"."workflow_name" < "RawData"."workflow_name"
+
+
+
+
+
+Ref: "mostFaillingJobsForEachWorkflow"."workflow_name" < "job_details"."job_name"
+
+Ref: "mostFaillingJobsForEachWorkflow"."workflow_name" < "job_details"."job_result"
+
+Ref: "stdDevOfWorkflow"."workflow_name" < "RawData"."workflow_name"
+
+Ref: "stdDevOfWorkflow"."workflow_name" < "RawData"."build_duration"
+
+Ref: "averageFailedWorkflowExecutionTime"."workflow_name" < "RawData"."workflow_name"
+
+Ref: "averageFailedWorkflowExecutionTime"."workflow_name" < "RawData"."build_duration"
+
+Ref: "averageFailedWorkflowExecutionTime"."workflow_name" < "RawData"."conclusion"
+
+Ref: "averageExecutionTimeOfJobs"."workflow_name" < "RawData"."workflow_name"
+
+Ref: "averageExecutionTimeOfJobs"."workflow_name" < "job_details"."job_name"
+
+Ref: "averageExecutionTimeOfJobs"."workflow_name" < "job_details"."job_duration"
+
+Ref: "mostFaillingSteps"."workflow_name" < "RawData"."workflow_name"
+
+Ref: "mostFaillingSteps"."workflow_name" < "job_details"."job_name"
+
+Ref: "mostFaillingSteps"."workflow_name" < "steps"."step_name"
+
+Ref: "mostFaillingSteps"."workflow_name" < "steps"."step_conclusion"
+
+Ref: "buildFileTypesCausingFaillures"."file_type" < "RawData"."file_types"
+
+Ref: "buildFileTypesCausingFaillures"."file_type" < "RawData"."conclusion"
+
+Ref: "averageTestsOfWorkflowPassed"."workflow_name" < "RawData"."workflow_name"
+
+Ref: "averageTestsOfWorkflowPassed"."workflow_name" < "RawData"."tests_total"
+
+Ref: "averageTestsOfWorkflowPassed"."workflow_name" < "RawData"."tests_skipped"
+
+Ref: "averageTestsOfWorkflowPassed"."workflow_name" < "RawData"."tests_passed"
+
+Ref: "averageModifiedTestsPerExecution"."average_churn" < "RawData"."gh_test_churn"
+
+Ref: "averageMofifiedTestPerWorkflowPerExecution"."workflow_name" < "RawData"."workflow_name"
+
+Ref: "averageMofifiedTestPerWorkflowPerExecution"."workflow_name" < "RawData"."gh_test_churn"
+
+Ref: "averageMofifiedTestPerWorkflowPerExecution"."workflow_name" < "RawData"."tests_total"
+
+Ref: "averageFaillureOfTeamMembers"."team_size" < "RawData"."gh_team_size_last_3_month"
+
+Ref: "averageFaillureOfTeamMembers"."team_size" < "RawData"."conclusion"
+
+Ref: "RawData"."branch" < "RawData"."repo"
