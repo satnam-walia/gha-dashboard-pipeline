@@ -6,12 +6,10 @@ import json
 import yaml
 from pathlib import Path
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 GHAMINER_PATH = BASE_DIR / "ghaminer"
 GHAMETRICS_PATH = GHAMINER_PATH / "src" / "GHAMetrics.py"
-REPOS_YAML = BASE_DIR / "config" / "repos.yaml"
 STATE_FILE = BASE_DIR / "output" / "state.json"
 OUTPUT_DIR = BASE_DIR / "output" / "raw"
 
@@ -28,8 +26,8 @@ def clone_or_update_ghaminer():
         print("[!] GHAMiner folder exists but is incomplete. Removing and recloning...")
         shutil.rmtree(GHAMINER_PATH)
 
-    print("[...] Cloning GHAMiner...")
-    subprocess.run(["git", "clone", repo_url, str(GHAMINER_PATH)], check=True)
+    subprocess.run(["git", "clone", repo_url, str(GHAMINER_PATH)], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+    return
 
 
 def should_run():
@@ -42,7 +40,7 @@ def should_run():
     return True
 
 
-def run_ghaminer_if_needed():
+def run_ghaminer_if_needed(repo_url: str, token: str):
     if not should_run():
         return
     print("[📥] Ensuring GHAMiner is present...")
@@ -52,33 +50,16 @@ def run_ghaminer_if_needed():
     if not GHAMETRICS_PATH.exists():
         raise FileNotFoundError("GHAMetrics.py not found")
 
-    load_dotenv()
-    token = os.getenv("GITHUB_TOKEN")
-    if not token:
-        raise EnvironmentError("GITHUB_TOKEN not found in .env")
-
-    if not REPOS_YAML.exists():
-        print("⚠️ repos.yaml not found.")
-        return
-
-    with open(REPOS_YAML, "r") as f:
-        repos = yaml.safe_load(f).get("repos", [])
-
-    if not repos:
-        print("⚠️ No repos defined in repos.yaml.")
-        return
-
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    for repo_url in repos:
-        repo_name = repo_url.split("/")[-1].replace(".git", "")
-        print(f"[→] Running GHAMiner on {repo_name}...")
-        subprocess.run([
-            sys.executable, str(GHAMETRICS_PATH),
-            "--s", repo_url,
-            "--token", token
-        ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        print(f"[✔] Completed {repo_name}")
+    repo_name = repo_url.split("/")[-1].replace(".git", "")
+    print(f"[→] Running GHAMiner on {repo_name}...")
+    subprocess.run([
+        sys.executable, str(GHAMETRICS_PATH),
+        "--s", repo_url,
+        "--token", token
+    ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+    print(f"[✔] Completed {repo_name}")
 
     STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(STATE_FILE, "w") as f:
