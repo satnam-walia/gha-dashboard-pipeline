@@ -20,17 +20,44 @@ This project builds an automated dashboard that monitors GitHub Actions workflow
 ## Wrapper Setup (Python)
 
 - Having Python 3.13.2 in your machine
-- Install pipenv in your machine
-    - *Command:* `pip install --user pipenv`
-- `cd` into the project's folder
-- Install dependencies
-    - *Command:* `pipenv install`
-- Run virtual env shell
-    - *Command:* `pipenv shell`
-- To execute files
-    - *Command:* `python {path/to/file}`
-- To exit the shell
-    - *Command:* `exit`
+### 1. Install Dependencies
+### 1. Install Dependencies
+
+```bash
+pipenv install
+```
+
+> Make sure you have Python 3.11+ and `pipenv` installed.
+
+### 2. Activate Virtual Environment
+
+```bash
+pipenv shell
+```
+
+### 3. Set up Environment Variables
+
+Create a `.env` file at the root of the project:
+
+```env
+GITHUB_TOKEN=your_personal_access_token
+```
+
+### 4. Run the Backend Server
+
+```bash
+pipenv run uvicorn backend.app:app --reload
+```
+
+Server will be running at: [http://localhost:8000](http://localhost:8000)
+
+### 5. Trigger GHAMiner Run
+
+Send a POST request to the `/refresh` endpoint:
+
+```http
+POST http://localhost:8000/refresh
+```
 
 ## Dashboard Setup (React)
 
@@ -80,14 +107,6 @@ The data pipeline is designed to support future machine learning use cases, such
 - Scoring workflow flakiness
 - Clustering logs for failure analysis
 
-## Environment Setup
-
-Copy `.env.example` → `.env` and provide the following variables:
-
-```env
-GH_TOKEN=ghp_xxxxxxxxxxxxxxxx
-DB_URI=postgresql://user:pass@host:port/dbname
-```
 
 ## License
 
