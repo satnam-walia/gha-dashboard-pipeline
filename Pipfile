@@ -9,6 +9,8 @@ requests = "*"
 pyyaml = "*"
 numpy = "*"
 pandas = "*"
+fastapi = "*"
+uvicorn = "*"
 
 [dev-packages]
 pytest = "*"

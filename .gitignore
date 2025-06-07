@@ -22,8 +22,8 @@ __pycache__/
 *.log
 
 # Environments
-.env
-.env.*
+dashboard/.env
+dashboard/.env.example
 .venv/
 venv/
 env/
