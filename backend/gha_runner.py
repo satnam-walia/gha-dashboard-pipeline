@@ -19,14 +19,22 @@ def clone_or_update_ghaminer():
 
     if GHAMINER_PATH.exists() and GHAMETRICS_PATH.exists():
         print("[✓] GHAMiner already present. Pulling latest changes...")
-        subprocess.run(["git", "-C", str(GHAMINER_PATH), "pull"], check=True)
+        subprocess.run(
+            ["git", "-C", str(GHAMINER_PATH), "pull"],
+            check=True,
+            shell=False,
+        )
         return
 
     if GHAMINER_PATH.exists():
         print("[!] GHAMiner folder exists but is incomplete. Removing and recloning...")
         shutil.rmtree(GHAMINER_PATH)
 
-    subprocess.run(["git", "clone", repo_url, str(GHAMINER_PATH)], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+    subprocess.run(
+        ["git", "clone", repo_url, str(GHAMINER_PATH)],
+        check=True,
+        shell=False,
+    )
     return
 
 
@@ -54,11 +62,22 @@ def run_ghaminer_if_needed(repo_url: str, token: str):
 
     repo_name = repo_url.split("/")[-1].replace(".git", "")
     print(f"[→] Running GHAMiner on {repo_name}...")
-    subprocess.run([
-        sys.executable, str(GHAMETRICS_PATH),
-        "--s", repo_url,
-        "--token", token
-    ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(GHAMETRICS_PATH),
+            "--s", repo_url,
+            "--token", token
+        ],
+        check=True,
+        shell=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    print(result.stdout)
+    if result.stderr:
+        print("[⚠️ STDERR]", result.stderr)
     print(f"[✔] Completed {repo_name}")
 
     STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
