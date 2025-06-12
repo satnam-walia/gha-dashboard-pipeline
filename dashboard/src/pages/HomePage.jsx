@@ -3,12 +3,12 @@ import {useStore} from '../store/useStore.js';
 
 function HomePage() {
     const saveToken = useStore((state) => state.setToken);
-    const saveRepoName = useStore((state) => state.setRepoName);
+    const saveRepoUrl = useStore((state) => state.setRepoUrl);
     const [token, setToken] = useState('');
-    const [repoName, setRepoName] = useState('');
+    const [repoUrl, setRepoUrl] = useState('');
     const [errors, setErrors] = useState({});
 
-    const isDisabled = !token.trim() || !repoName.trim();
+    const isDisabled = !token.trim() || !repoUrl.trim();
 
     const handleTokenChange = (e) => {
         setToken(e.target.value);
@@ -18,7 +18,7 @@ function HomePage() {
     };
 
     const handleRepoChange = (e) => {
-        setRepoName(e.target.value);
+        setRepoUrl(e.target.value);
         if (errors.repo) {
             setErrors((prev) => ({...prev, repo: undefined}));
         }
@@ -41,7 +41,7 @@ function HomePage() {
     const valideGithubRepo = () => {
         const newErrors = {};
         const repoRegex = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+$/;
-        if (!repoRegex.test(repoName.trim())) {
+        if (!repoRegex.test(repoUrl.trim())) {
             newErrors.repo = 'Invalid URL format (expected: https://github.com/user/repo)';
         }
 
@@ -59,7 +59,7 @@ function HomePage() {
             return;
         }
         saveToken(token);
-        saveRepoName(repoName);
+        saveRepoUrl(repoUrl);
     };
 
     return (
@@ -68,7 +68,7 @@ function HomePage() {
                 <div className={" flex flex-col items-center mb-8 gap-2"}>
                     <h1 className={"text-3xl font-semibold text-blue-600"}>Welcome to GHAminer Dashboard</h1>
                     <p className={"max-w-md text-center text-black leading-6"}>To get started, enter your GitHub token
-                        and the repository for which you want to view the dashboard.</p>
+                        and the repository URL for which you want to view the dashboard.</p>
                 </div>
                 <form onSubmit={handleSubmit} className="w-1/2 mx-auto px-20 py-10 border border-blue-200 rounded-2xl">
 
@@ -77,7 +77,7 @@ function HomePage() {
                         <input
                             type="text"
                             placeholder="https://github.com/user/repo"
-                            value={repoName}
+                            value={repoUrl}
                             onChange={handleRepoChange}
                             className="w-full border rounded p-2 mt-1"
                         />

@@ -1,16 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { encryptToken, decryptToken } from '../utils/secureToken';
+import { encryptToken, decryptToken } from '../utils/secureData.js';
 
-let useStore; // déclaration anticipée
-
-useStore = create(
+const useStore = create(
     persist(
         (set) => ({
             token: null,
-            repo: null,
+            repoUrl: null,
             setToken: (token) => set({ token }),
-            setRepoName: (repo) => set({ repo }),
+            setRepoUrl: (repoUrl) => set({ repoUrl }),
         }),
         {
             name: 'token-session',

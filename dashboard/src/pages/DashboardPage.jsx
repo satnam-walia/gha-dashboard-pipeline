@@ -1,33 +1,61 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import WorkflowStddevChart from "../charts/WorkflowStddevChart.jsx";
 import WorkflowFailureChart from "../charts/WorkflowFailureChart.jsx";
 import {IssuerFailureTable} from "../tables/IssuerFailureTable.jsx";
 import ReactLogo from "../assets/react.svg"
+import {useStore} from "../store/useStore.js";
 
-const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
-
-const DashboardPage = ({ kpis, onReset, onRepoSubmit }) => {
+const DashboardPage = () => {
+    const token = useStore((state) => state.token)
+    const repoFromStore = useStore((state) => state.repoUrl)
+    const saveNewRepoUrl = useStore((state) => state.setRepoUrl)
     const [repoUrl, setRepoUrl] = useState("");
+    const [kpis, setKpis] = useState({});
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (repoUrl.trim()) {
+    const fetchKpis = async (repo) => {
+        console.log("repoUrl", repo, repoFromStore);
+        if (repo.trim()) {
             try {
                 const response = await fetch("http://localhost:8000/api/refresh", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ repo_url: repoUrl, token: GITHUB_TOKEN }),
+                    body: JSON.stringify({repo_url: repo, token: token}),
                 });
-
                 const result = await response.json();
-                alert(`Status: ${result.status}`);
+                saveNewRepoUrl(repoUrl);
+                setKpis(result.data)
+
             } catch (err) {
                 console.error("Error:", err);
                 alert("Failed to refresh repo.");
             }
         }
+    }
+
+    useEffect(() => {
+        const launch = async () => {
+            try {
+                await fetchKpis(repoFromStore);
+            } catch (e) {
+                console.error('Erreur fetchKpis', e);
+            }
+        };
+        launch();
+
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = '';
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await fetchKpis(repoUrl)
     };
     return (
         <div className="mx-56 p-8 bg-white">
