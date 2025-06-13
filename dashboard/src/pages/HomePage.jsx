@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {useStore} from '../store/useStore.js';
 
 function HomePage() {
@@ -7,11 +7,11 @@ function HomePage() {
     const [token, setToken] = useState('');
     const [repoUrl, setRepoUrl] = useState('');
     const [errors, setErrors] = useState({});
-
     const isDisabled = !token.trim() || !repoUrl.trim();
 
     const handleTokenChange = (e) => {
         setToken(e.target.value);
+
         if (errors.token) {
             setErrors((prev) => ({...prev, token: undefined}));
         }
@@ -19,10 +19,12 @@ function HomePage() {
 
     const handleRepoChange = (e) => {
         setRepoUrl(e.target.value);
+
         if (errors.repo) {
             setErrors((prev) => ({...prev, repo: undefined}));
         }
     };
+
     const checkGithubToken = async () => {
         try {
             const res = await fetch('https://api.github.com/user', {
@@ -31,33 +33,42 @@ function HomePage() {
                     Accept: 'application/vnd.github+json',
                 },
             });
-            return res.ok;
 
+            return res.ok;
         } catch (error) {
             return false;
         }
     };
 
-    const valideGithubRepo = () => {
+    const validGithubRepo = () => {
         const newErrors = {};
         const repoRegex = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+$/;
+
         if (!repoRegex.test(repoUrl.trim())) {
             newErrors.repo = 'Invalid URL format (expected: https://github.com/user/repo)';
         }
 
         setErrors(newErrors);
+
         return Object.keys(newErrors).length === 0;
     };
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!valideGithubRepo()) return;
-        const isTokenValid = await checkGithubToken();
-        if (!isTokenValid) {
-            setErrors((prev) => ({...prev, token: 'Invalid or unauthorized token'}));
+
+        if (!validGithubRepo()) {
             return;
         }
+
+        const isTokenValid = await checkGithubToken();
+
+        if (!isTokenValid) {
+            setErrors((prev) => ({...prev, token: 'Invalid or unauthorized token'}));
+
+            return;
+        }
+        
         saveToken(token);
         saveRepoUrl(repoUrl);
     };
@@ -87,7 +98,7 @@ function HomePage() {
                         GitHub Token :
                         <input
                             type="password"
-                            placeholder="github_pat_...."
+                            placeholder="github_pat_…"
                             value={token}
                             onChange={handleTokenChange}
                             className="w-full border rounded p-2 mt-1"

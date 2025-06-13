@@ -35,7 +35,7 @@ If the token is valid and the repository exists, the dashboard will be displayed
 ```bash
 git clone https://github.com/satnam-walia/gha-dashboard-pipeline.git
 cd dashboard
-````
+```
 
 2. Install dependencies:
 
@@ -56,7 +56,9 @@ http://localhost:5173
 ```
 
 ---
+
 ## Disclaimer
+
 * GitHub tokens are stored only temporarily in sessionStorage, and are encrypted in-memory.
 * Never share your token or commit it to version control.
 * This tool is intended for local visualization and debugging only.

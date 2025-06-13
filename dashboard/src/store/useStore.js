@@ -15,8 +15,13 @@ const useStore = create(
             storage: {
                 getItem: (key) => {
                     const encrypted = sessionStorage.getItem(key);
-                    if (!encrypted) return null;
+
+                    if (!encrypted) {
+                        return null;
+                    }
+
                     const decrypted = decryptToken(encrypted);
+
                     return decrypted ? JSON.stringify(decrypted) : null;
                 },
                 setItem: (key, value) => {

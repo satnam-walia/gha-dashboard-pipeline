@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import WorkflowStddevChart from "../charts/WorkflowStddevChart.jsx";
 import WorkflowFailureChart from "../charts/WorkflowFailureChart.jsx";
 import {IssuerFailureTable} from "../tables/IssuerFailureTable.jsx";
@@ -13,7 +13,6 @@ const DashboardPage = () => {
     const [kpis, setKpis] = useState({});
 
     const fetchKpis = async (repo) => {
-        console.log("repoUrl", repo, repoFromStore);
         if (repo.trim()) {
             try {
                 const response = await fetch("http://localhost:8000/api/refresh", {
@@ -23,10 +22,10 @@ const DashboardPage = () => {
                     },
                     body: JSON.stringify({repo_url: repo, token: token}),
                 });
+
                 const result = await response.json();
                 saveNewRepoUrl(repoUrl);
                 setKpis(result.data)
-
             } catch (err) {
                 console.error("Error:", err);
                 alert("Failed to refresh repo.");
@@ -42,21 +41,25 @@ const DashboardPage = () => {
                 console.error('Erreur fetchKpis', e);
             }
         };
-        launch();
 
         const handleBeforeUnload = (e) => {
             e.preventDefault();
             e.returnValue = '';
         };
+
+        launch();
         window.addEventListener('beforeunload', handleBeforeUnload);
+        
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         await fetchKpis(repoUrl)
     };
+    
     return (
         <div className="mx-56 p-8 bg-white">
             <div className="flex flex-row items-baseline justify-center gap-2">
