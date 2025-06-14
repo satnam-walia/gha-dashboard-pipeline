@@ -8,11 +8,37 @@ const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
 
 const DashboardPage = ({ kpis, onReset, onRepoSubmit }) => {
     const [repoUrl, setRepoUrl] = useState("");
+    // ---- new code----
+    // to store streamed KPis and SSE elements
+    const [streamedKpis, setStreamedKpis] = useState(null)
+    const [eventSource, setEventSource] = useState(null)
+    // -----------------
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (repoUrl.trim()) {
             try {
+                //---- new code-----
+                // code to start the SSE (event stream)
+                const source = new EventSource("http://localhost:8000/api/csv_checker");
+                source.onmessage= (event) => {
+                  console.log("new stream event");
+                  try{
+                    const parsedData = JSON.parse(event.data);
+                    setStreamedKpis(parsedData);
+                    console.log("new kpis streamed: ", parsedData);
+                  } 
+                  catch (e) {
+                    console.log("error parsing streamed kpis: ",e);
+                  }
+                };
+                source.onerror = (e) =>{
+                  console.error("Error SSE: ",e);
+                  source.close();
+                };
+                await new Promise((resolve) => setTimeout(resolve, 5000));
+                //---------------------
                 const response = await fetch("http://localhost:8000/api/refresh", {
                     method: "POST",
                     headers: {
@@ -57,6 +83,17 @@ const DashboardPage = ({ kpis, onReset, onRepoSubmit }) => {
                 </div>
                 <IssuerFailureTable data={kpis.issuerFailures}/>
             </div>
+            {/*------ new code--------*/}
+            <div>test react</div>
+            {streamedKpis && (
+                <div className="mt-8 p-4 bg-gray-100 rounded">
+                    <h3 className="text-xl font-semibold text-gray-800 mb-2">Mise a jour des KPIs en temps reel</h3>
+                    <pre className="text-sm text-gray-700 overflow-auto max-h-96">
+                        {JSON.stringify(streamedKpis, null, 2)}
+                    </pre>
+                </div>
+            )}
+            {/*-----------------*/}
         </div>
     )
 }

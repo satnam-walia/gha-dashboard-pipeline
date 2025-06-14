@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Request
-from fastapi.responses import JSONResponse
-from backend.gha_runner import run_ghaminer_if_needed
+from fastapi.responses import JSONResponse, StreamingResponse
+from gha_runner import run_ghaminer_if_needed
 import logging
-# from transform_kpis import get_latest_kpis
+# from backend.csv_checker import check_csv
+from csv_checker import check_csv
 
 router = APIRouter(prefix="/api")
 
@@ -30,4 +31,11 @@ async def refresh(request: Request):
         return JSONResponse(content={"status": "refreshed" if triggered else "up-to-date"})
     except Exception as e:
         logging.exception("Failed to run GHAminer")
+        print("error: "+ str(e))
         return JSONResponse(status_code=500, content={"status": "error", "message": str(e)})
+
+# route to enable the event stream
+@router.get("/csv_checker")
+async def stream_new_data(request: Request):
+    return StreamingResponse(check_csv(request), media_type="text/event-stream")
+    
