@@ -74,14 +74,14 @@ function HomePage() {
     };
 
     return (
-        <div className={"min-h-screen bg-white mx-84 py-20 border border-blue-600"}>
+        <div className={"min-h-screen bg-white py-20"}>
             <div className="flex flex-col mx-auto p-4">
                 <div className={" flex flex-col items-center mb-8 gap-2"}>
                     <h1 className={"text-3xl font-semibold text-blue-600"}>Welcome to GHAminer Dashboard</h1>
                     <p className={"max-w-md text-center text-black leading-6"}>To get started, enter your GitHub token
                         and the repository URL for which you want to view the dashboard.</p>
                 </div>
-                <form onSubmit={handleSubmit} className="w-1/2 mx-auto px-20 py-10 border border-blue-200 rounded-2xl">
+                <form onSubmit={handleSubmit} className="w-1/3 mx-auto px-20 py-10 border border-blue-200 rounded-2xl">
 
                     <label className="block mb-4 mt-4">
                         GitHub Repository :
